@@ -1,11 +1,15 @@
 package com.cest.pojo;
 
-import lombok.Data;
+import lombok.*;
 
 /**
  * Created by cestlavie on 2019/12/23.
  */
-@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Builder(toBuilder = true)
 public class User {
 
     private Long id;
