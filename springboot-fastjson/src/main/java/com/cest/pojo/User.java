@@ -12,11 +12,11 @@ import lombok.*;
 @Builder(toBuilder = true)
 public class User {
 
-    private Long id;
+    private int id;
 
     private String name;
 
-    private int age;
+    private String add;
 
-    private String address;
+    private String old;
 }

@@ -14,10 +14,10 @@ public class UserService {
 
     public List<User> queryList(){
         List<User> list = new ArrayList<>();
-        list.add(User.builder().id(1L).age(12).name("张三").build());
-        list.add(User.builder().id(1L).age(12).name("李四").address("汉口").build());
-        list.add(User.builder().id(1L).age(12).name("王五").address("洪山").build());
-        list.add(User.builder().id(1L).age(12).name("周栈").address("青山").build());
+        list.add(User.builder().id(1).old("12").name("张三").build());
+        list.add(User.builder().id(1).old("12").name("李四").add("汉口").build());
+        list.add(User.builder().id(1).old("12").name("王五").add("洪山").build());
+        list.add(User.builder().id(1).old("12").name("周栈").add("青山").build());
 
         return list;
     }
