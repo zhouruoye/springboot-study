@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -51,6 +52,8 @@ public class ExcelBootController {
         FileInputStream fileInputStream = new FileInputStream(new File("D:\\tmp\\导入1.xlsx"));
 
         if(fileInputStream != null) {
+            List<UserEntity> userEntities = new ArrayList<>();
+
             ExcelBoot.ImportBuilder(fileInputStream,  UserEntity.class)
                     .importExcel(new ImportFunction<UserEntity>() {
 
@@ -64,6 +67,7 @@ public class ExcelBootController {
                             //将读取到Excel中每一行的userEntity数据进行自定义处理
                             //如果该行数据发生问题,将不会走本方法,而会走onError方法
                             log.info("进入正确的处理方法");
+                            userEntities.add(userEntity);
                             System.out.println(userEntity.toString());
                         }
 
@@ -76,6 +80,8 @@ public class ExcelBootController {
                             log.info(errorEntity.getErrorMessage());
                         }
                     });
+
+            System.out.println(userEntities.toString());
         }
     }
 

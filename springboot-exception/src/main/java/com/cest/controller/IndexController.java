@@ -32,7 +32,7 @@ public class IndexController {
     //http://localhost:8080/hello 异常
     @GetMapping("/hello")
     public String hello(Model model) {
-        int i = 1/0;
+//        int i = 1/0;
         return "hello";
     }
 }
