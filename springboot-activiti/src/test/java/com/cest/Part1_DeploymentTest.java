@@ -28,7 +28,7 @@ public class Part1_DeploymentTest extends BaseTest {
     //通过bpmn部署流程 -- 同时创建ACT_RE_PROCDEF--流程定义表 ACT_RE_DEPLOYMENT--流程部署表
     @Test
     public void initDeploymentByBPMN() {
-        String filename="BPMN/Part1_Deployment.bpmn";
+        String filename="BPMN/AddTask_candidate.bpmn";
         // String pngname="BPMN/Part1_Deployment.png";
         Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(filename)

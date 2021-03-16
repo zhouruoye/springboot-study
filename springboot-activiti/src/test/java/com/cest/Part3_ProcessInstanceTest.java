@@ -25,7 +25,7 @@ public class Part3_ProcessInstanceTest extends BaseTest{
         //1、获取页面表单填报的内容，请假时间，请假事由，String fromData
         //2、fromData 写入业务表，返回业务表主键ID==businessKey
         //3、把业务数据与Activiti7流程数据关联
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Part1_Deployment","bKey002");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("mytask2","bKey004");
         System.out.println("流程实例ID："+processInstance.getProcessDefinitionId());
     }
 
@@ -38,9 +38,9 @@ public class Part3_ProcessInstanceTest extends BaseTest{
 
         for (ProcessInstance processInstance : list) {
             System.out.println("流程实例");
-            System.out.println("getId:" + processInstance.getId());
-            System.out.println("getProcessInstanceId:" + processInstance.getProcessInstanceId());
-            System.out.println("getProcessDefinitionId:" + processInstance.getProcessDefinitionId());
+            System.out.println("getId:" + processInstance.getId());  //实例id
+            System.out.println("getProcessInstanceId:" + processInstance.getProcessInstanceId()); //实例id
+            System.out.println("getProcessDefinitionId:" + processInstance.getProcessDefinitionId()); //流程定义id
             System.out.println("getDeploymentId:" + processInstance.getDeploymentId());
             System.out.println("isEnded:" + processInstance.isEnded()); //是否结束
             System.out.println("isSuspended:" + processInstance.isSuspended()); //是否被挂起
@@ -65,6 +65,6 @@ public class Part3_ProcessInstanceTest extends BaseTest{
      */
     @Test
     public void delProcessInstance() {
-        runtimeService.deleteProcessInstance("957864fa-85fc-11eb-9519-00ff2cb67c15","删除测试");
+        runtimeService.deleteProcessInstance("33889811-861f-11eb-b4c2-00ff2cb67c15","删除测试");
     }
 }
