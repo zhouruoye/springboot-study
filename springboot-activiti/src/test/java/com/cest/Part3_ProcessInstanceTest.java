@@ -42,6 +42,8 @@ public class Part3_ProcessInstanceTest extends BaseTest{
             System.out.println("getId:" + processInstance.getId());  //实例id
             System.out.println("getProcessInstanceId:" + processInstance.getProcessInstanceId()); //实例id
             System.out.println("getProcessDefinitionId:" + processInstance.getProcessDefinitionId()); //流程定义id
+            System.out.println("getProcessDefinitionName:" + processInstance.getProcessDefinitionName()); //流程定义name
+            System.out.println("getProcessDefinitionKey:" + processInstance.getProcessDefinitionKey()); //流程定义key
             System.out.println("getDeploymentId:" + processInstance.getDeploymentId());
             System.out.println("isEnded:" + processInstance.isEnded()); //是否结束
             System.out.println("isSuspended:" + processInstance.isSuspended()); //是否被挂起
