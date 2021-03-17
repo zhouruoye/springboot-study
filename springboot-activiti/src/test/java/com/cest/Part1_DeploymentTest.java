@@ -28,12 +28,12 @@ public class Part1_DeploymentTest extends BaseTest {
     //通过bpmn部署流程 -- 同时创建ACT_RE_PROCDEF--流程定义表 ACT_RE_DEPLOYMENT--流程部署表
     @Test
     public void initDeploymentByBPMN() {
-        String filename="BPMN/AddTask_candidate.bpmn";
+        String filename= "BPMN/Part6_EUL02.bpmn";
         // String pngname="BPMN/Part1_Deployment.png";
         Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource(filename)
                 //.addClasspathResource(pngname)//图片
-                .name("流程部署测试申请task1")
+                .name("EUL表达式02")
                 .deploy();
         System.out.println(deployment.getName());
     }

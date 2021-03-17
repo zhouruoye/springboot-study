@@ -12,7 +12,7 @@ import java.util.List;
  * 历史任务查询
  */
 @Slf4j
-public class Part5_HisTask extends BaseTest {
+public class Part5_HisTaskTest extends BaseTest {
 
     @Autowired
     private HistoryService historyService;

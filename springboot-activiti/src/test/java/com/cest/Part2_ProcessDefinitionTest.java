@@ -37,7 +37,7 @@ public class Part2_ProcessDefinitionTest extends BaseTest {
     //删除流程定义 如果是true 则是递归删除，会删除流程定义，流程实例以及各种历史实例……
     @Test
     public void delDefinitions() {
-        repositoryService.deleteDeployment("cad20dbf-2ef9-11eb-8508-00ff56d6be42",true);
+        repositoryService.deleteDeployment("df1d2e0c-86eb-11eb-8e7e-00ff2cb67c15",true);
         log.info("删除流程定义成功");
     }
 

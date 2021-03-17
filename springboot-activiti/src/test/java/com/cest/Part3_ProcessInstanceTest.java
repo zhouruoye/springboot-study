@@ -19,13 +19,14 @@ public class Part3_ProcessInstanceTest extends BaseTest{
 
     /**
      * 初始化流程实例--开启流程  ACT_RU_EXECUTION_流程实例表  ACT_RU_IDENTITYLINK_执行人参与表
+     * 相同key的流程部署取最后一个版本的key
      */
     @Test
     public void initProcessInstance() {
         //1、获取页面表单填报的内容，请假时间，请假事由，String fromData
         //2、fromData 写入业务表，返回业务表主键ID==businessKey
         //3、把业务数据与Activiti7流程数据关联
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("mytask2","bKey004");
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("EUL_02","bKey005");
         System.out.println("流程实例ID："+processInstance.getProcessDefinitionId());
     }
 
@@ -45,7 +46,6 @@ public class Part3_ProcessInstanceTest extends BaseTest{
             System.out.println("isEnded:" + processInstance.isEnded()); //是否结束
             System.out.println("isSuspended:" + processInstance.isSuspended()); //是否被挂起
         }
-        
     }
 
     /**
