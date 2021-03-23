@@ -1,6 +1,7 @@
 package com.cest.controller;
 
 import com.cest.enums.ResponseCode;
+import com.cest.mapper.ActivitiMapper;
 import com.cest.util.AjaxResponse;
 import com.cest.util.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -33,9 +34,12 @@ public class ProcessDefinitionController {
     @Autowired
     private RepositoryService repositoryService;
 
+    @Autowired
+    private ActivitiMapper activitiMapper;
+
     //BPMN上传
     @PostMapping(value = "/uploadStreamAndDeployment")
-    public AjaxResponse uploadStreamAndDeployment(@RequestParam("multipartFile") MultipartFile multipartFile) {
+    public AjaxResponse uploadStreamAndDeployment(@RequestParam("processFile") MultipartFile multipartFile) {
         try {
             //获取上传的文件名
             String originalFilename = multipartFile.getOriginalFilename();
@@ -82,7 +86,7 @@ public class ProcessDefinitionController {
         filePath = filePath.replace("\\", "/");
         filePath = filePath.replace("file:", "");
 
-       // String filePath = request.getSession().getServletContext().getRealPath("/") + "bpmn/";
+        // String filePath = request.getSession().getServletContext().getRealPath("/") + "bpmn/";
         fileName = UUID.randomUUID() + suffixName; // 新文件名
         File file = new File(filePath + fileName);
         if (!file.getParentFile().exists()) {
@@ -101,7 +105,7 @@ public class ProcessDefinitionController {
     public AjaxResponse addDeploymentByString(@RequestParam("stringBPMN") String stringBPMN) {
         try {
             Deployment deployment = repositoryService.createDeployment()
-                    .addString("CreateWithBPMNJS.bpmn",stringBPMN)
+                    .addString("CreateWithBPMNJS.bpmn", stringBPMN)
                     .name("不知道在哪显示的部署名称")
                     .deploy();
             //System.out.println(deployment.getName());
@@ -200,11 +204,14 @@ public class ProcessDefinitionController {
 
     //流程定义查询
     @GetMapping(value = "/delDefinition")
-    public AjaxResponse delDefinition(@RequestParam("deploymentID") String deploymentID) {
+    public AjaxResponse delDefinition(@RequestParam("depID") String depID, @RequestParam("pdID") String pdID) {
         try {
-            repositoryService.deleteDeployment(deploymentID, true);
+            //删除数据
+            int result = activitiMapper.DeleteFormData(pdID);
+
+            repositoryService.deleteDeployment(depID, true);
             return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
-                    ResponseCode.SUCCESS.getDesc(), deploymentID);
+                    ResponseCode.SUCCESS.getDesc(), depID);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("删除流程定义失败:{}", e);
