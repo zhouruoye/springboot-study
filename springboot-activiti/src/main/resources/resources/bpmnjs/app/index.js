@@ -18,7 +18,6 @@ const publicurl = proHost + key;
 var customTranslateModule = {
     translate: ['value', customTranslate]
 };
-debugger
 var container = $('#js-drop-zone');
 var canvas = $('#js-canvas');
 var bpmnModeler = new BpmnModeler({
@@ -46,13 +45,17 @@ if (!window.FileList || !window.FileReader) {
 
 
 $(function () {
+    console.log('url',publicurl)
+    console.log('winurl',window.location.href)
     // 创建bpmn
     var param = tools.getUrlParam(window.location.href)
-        $('.item').show()
-    if (param.type === 'addBpmn') {
+    $('.item').show()
+    //如果不是系统链接过来的地址
+    if(param === null ||  param === undefined) {
+        console.log('param is null')
+    } else if (param.type === 'addBpmn') {
         tools.createDiagram(diagramXML, bpmnModeler, container);
     } else if (param.type === 'lookBpmn') { //编辑bpmn
-        debugger
         $('.item').hide()
         $('.download').show()
         const Id = param.deploymentFileUUID || '6d4af2dc-bab0-11ea-b584-3cf011eaafca'

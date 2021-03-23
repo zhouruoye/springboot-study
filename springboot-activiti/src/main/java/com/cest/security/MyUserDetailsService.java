@@ -3,8 +3,7 @@ package com.cest.security;
 
 import com.cest.mapper.UserInfoMapper;
 import com.cest.pojo.UserInfo;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,10 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-
+@Slf4j
 @Component
 public class MyUserDetailsService implements UserDetailsService {
-    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private UserInfoMapper userInfoMapper;
@@ -26,7 +24,8 @@ public class MyUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserInfo userInfo = userInfoMapper.selectByUsername(username);
         if (userInfo == null) {
-            throw new UsernameNotFoundException("数据库中无此用户！");
+            log.info("数据库中无此用户");
+            throw new UsernameNotFoundException("数据库中无此用户");
         }
         return userInfo;
     }

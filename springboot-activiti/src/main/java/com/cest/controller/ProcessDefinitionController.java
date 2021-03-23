@@ -8,22 +8,29 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.zip.ZipInputStream;
 
 @Slf4j
 @RestController
 @RequestMapping("/processDefinition")
-public class ProcessDefinitionController {
+public class ProcessDefinitionController extends BaseController{
 
     //流程部署
     @Autowired
@@ -62,6 +69,35 @@ public class ProcessDefinitionController {
             return AjaxResponse.AjaxData(ResponseCode.ERROR.getCode(),
                     "部署流程失败", e.toString());
         }
+    }
+
+    @PostMapping(value = "/upload")
+    public AjaxResponse upload(HttpServletRequest request, @RequestParam("processFile") MultipartFile multipartFile) {
+
+        if (multipartFile.isEmpty()) {
+            System.out.println("文件为空");
+        }
+        String fileName = multipartFile.getOriginalFilename();  // 文件名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+        String filePath = BPMN_PathMapping; // 上传后的路径
+
+        //本地路径格式转上传路径格式
+        filePath = filePath.replace("\\", "/");
+        filePath = filePath.replace("file:", "");
+
+        // String filePath = request.getSession().getServletContext().getRealPath("/") + "bpmn/";
+        fileName = UUID.randomUUID() + suffixName; // 新文件名
+        File file = new File(filePath + fileName);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        try {
+            multipartFile.transferTo(file);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
+                ResponseCode.SUCCESS.getDesc(), fileName);
     }
 
     //流程部署查询
