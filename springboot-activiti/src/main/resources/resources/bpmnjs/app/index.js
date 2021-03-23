@@ -18,7 +18,6 @@ const publicurl = proHost + key;
 var customTranslateModule = {
     translate: ['value', customTranslate]
 };
-debugger
 var container = $('#js-drop-zone');
 var canvas = $('#js-canvas');
 var bpmnModeler = new BpmnModeler({
@@ -48,11 +47,12 @@ if (!window.FileList || !window.FileReader) {
 $(function () {
     // 创建bpmn
     var param = tools.getUrlParam(window.location.href)
-        $('.item').show()
-    if (param.type === 'addBpmn') {
+    $('.item').show()
+    if(param === null || param === undefined) {
+        console.log("param is null")
+    }else if (param.type === 'addBpmn') {
         tools.createDiagram(diagramXML, bpmnModeler, container);
     } else if (param.type === 'lookBpmn') { //编辑bpmn
-        debugger
         $('.item').hide()
         $('.download').show()
         const Id = param.deploymentFileUUID || '6d4af2dc-bab0-11ea-b584-3cf011eaafca'
@@ -116,6 +116,7 @@ $(function () {
         $('.item').hide()
         $('.download').show()
     }
+
     // 点击新增
     $('#js-download-diagram').on("click", function () {
        tools.syopen('alert')
@@ -125,18 +126,18 @@ $(function () {
     $('.cancel').on("click",function () {
         tools.syhide('alert')
     })
+
     // 点击确定
     $('#sure').on('click',function(){
        // const text=$("#deploymentName").val()
         tools.saveBpmn(bpmnModeler)
     })
 
-
-
     // 点击下载
     $("#downloadBpmn").on("click", function () {
         tools.downLoad(bpmnModeler)
     })
+
     // 点击上传
     $("#uploadFile").on("change", function () {
         tools.upload(bpmnModeler,container)

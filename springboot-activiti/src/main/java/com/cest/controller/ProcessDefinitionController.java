@@ -2,6 +2,7 @@ package com.cest.controller;
 
 import com.cest.enums.ResponseCode;
 import com.cest.util.AjaxResponse;
+import com.cest.util.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
@@ -11,13 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 import java.util.zip.ZipInputStream;
 
 @Slf4j
@@ -61,6 +65,51 @@ public class ProcessDefinitionController {
         } catch (Exception e) {
             return AjaxResponse.AjaxData(ResponseCode.ERROR.getCode(),
                     "部署流程失败", e.toString());
+        }
+    }
+
+    @PostMapping(value = "/upload")
+    public AjaxResponse upload(HttpServletRequest request, @RequestParam("processFile") MultipartFile multipartFile) {
+
+        if (multipartFile.isEmpty()) {
+            System.out.println("文件为空");
+        }
+        String fileName = multipartFile.getOriginalFilename();  // 文件名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
+        String filePath = GlobalConfig.BPMN_PathMapping; // 上传后的路径
+
+        //本地路径格式转上传路径格式
+        filePath = filePath.replace("\\", "/");
+        filePath = filePath.replace("file:", "");
+
+       // String filePath = request.getSession().getServletContext().getRealPath("/") + "bpmn/";
+        fileName = UUID.randomUUID() + suffixName; // 新文件名
+        File file = new File(filePath + fileName);
+        if (!file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();
+        }
+        try {
+            multipartFile.transferTo(file);
+        } catch (Exception e) {
+            System.out.println(e.toString());
+        }
+        return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
+                ResponseCode.SUCCESS.getDesc(), fileName);
+    }
+
+    @PostMapping(value = "/addDeploymentByString")
+    public AjaxResponse addDeploymentByString(@RequestParam("stringBPMN") String stringBPMN) {
+        try {
+            Deployment deployment = repositoryService.createDeployment()
+                    .addString("CreateWithBPMNJS.bpmn",stringBPMN)
+                    .name("不知道在哪显示的部署名称")
+                    .deploy();
+            //System.out.println(deployment.getName());
+            return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
+                    ResponseCode.SUCCESS.getDesc(), deployment.getId());
+        } catch (Exception e) {
+            return AjaxResponse.AjaxData(ResponseCode.ERROR.getCode(),
+                    "string部署流程失败", e.toString());
         }
     }
 
