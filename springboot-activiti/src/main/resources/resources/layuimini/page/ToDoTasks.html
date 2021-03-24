@@ -26,20 +26,37 @@
 
         <script type="text/html" id="currentTableBar">
             <a class="layui-btn layui-btn-xs layui-btn-danger data-count-handle" lay-event="handle">办理</a>
+<!--            <a class="layui-btn layui-btn-xs layui-btn-normal data-count-start" lay-event="start">参数</a>-->
         </script>
 
     </div>
 </div>
+<!--启动实例弹窗-->
+<script type="text/html" id="stratProcessDepEditDialog">
+    <form id="strarProcessDepForm" lay-filter="strarProcessDepForm" class="layui-form model-form">
+        <div class="layui-form-item">
+            <label class="layui-form-label layui-form-required">任务参数:</label>
+            <div class="layui-input-block">
+                <input name="deploymentName" id="variable" placeholder="请输入任务参数" class="layui-input"
+                       lay-verType="tips" lay-verify="required" required/>
+            </div>
+        </div>
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" lay-filter="startProcessDepEditSubmit" lay-submit id="submit2">提交</button>
+            <button class="layui-btn layui-btn-primary" type="button" ew-event="closeDialog">返回</button>
+        </div>
+    </form>
+</script>
 <script src="../lib/layui-v2.5.5/layui.js" charset="utf-8"></script>
 <script src="../lib/jquery-3.4.1/jquery-3.4.1.min.js"></script>
 <script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
 <script src="../js/ManualPaging.js"></script>
 <script>
-    layui.use(['form', 'table'], function () {
+    layui.use(['form', 'table','admin'], function () {
         var $ = layui.jquery,
             form = layui.form,
+            admin = layui.admin,
             table = layui.table;
-
         var insTb = table.render({
             elem: '#ToDoTasksTableId',
             toolbar: '#toolbarDemo',
@@ -96,6 +113,9 @@
             if (obj.event === 'handle') {  // 监听办理操作
                 // console.log(obj);
                 creatFormTable(obj);
+            } else if (obj.event === 'start') {
+                console.log('hahaha');
+                stratProcessDepEditDialog(obj);
             }
         });
 
@@ -177,6 +197,36 @@
                 }, 'json');
             });
         };
+        /* 启动实例*/
+        function stratProcessDepEditDialog(obj) {
+            admin.open({
+                type: 1,
+                title:  '启动流程部署信息',
+                content: $('#stratProcessDepEditDialog').html(),
+                success:function(layero, dIndex){
+                    form.on('submit(strarProcessDepForm)', function (data) {
+                        var loadIndex = layer.load(2);
+                        $.get( ''+publicurl+'task/completeTask',
+                            {
+                                taskID:obj.data ? obj.data.id : '',
+                                variable:$("#variable").val()
+                            }, function (res) {
+                                layer.close(loadIndex);
+                                if (res.status === 0) {
+                                    layer.close(dIndex);
+                                    layer.msg(res.msg, {icon: 1});
+                                    insTb.reload();
+                                } else {
+                                    layer.close(dIndex);
+                                    layer.alert(res.msg+'<br>'+res.obj, {icon: 2});
+                                }
+                            }, 'json');
+                        layer.close(loadIndex);
+                        return false;
+                    })
+                }
+            })
+        }
 
     });
 </script>

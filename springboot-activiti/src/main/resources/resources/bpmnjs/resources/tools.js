@@ -157,6 +157,7 @@ const tools = {
      * @param {string} url url地址
      */
     openFromUrl(bpmnModeler, container, url) {
+        console.log('url is ',url)
         $.ajax(url, { dataType: 'text' }).done(async function (xml) {
             try {
                 await bpmnModeler.importXML(xml);

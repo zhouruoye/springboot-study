@@ -4,6 +4,7 @@ import com.cest.enums.ResponseCode;
 import com.cest.pojo.UserInfo;
 import com.cest.security.SecurityUtil;
 import com.cest.util.AjaxResponse;
+import com.cest.util.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.api.model.shared.model.VariableInstance;
 import org.activiti.api.process.model.ProcessInstance;
@@ -13,8 +14,10 @@ import org.activiti.api.runtime.shared.query.Page;
 import org.activiti.api.runtime.shared.query.Pageable;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.ProcessDefinition;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -42,7 +46,12 @@ public class ProcessInstanceController {
     @GetMapping(value = "/getInstances")
     public AjaxResponse getInstances(@AuthenticationPrincipal UserInfo userInfo) {
         try {
-            securityUtil.logInAs("bajie");
+            if(GlobalConfig.Test) {
+                securityUtil.logInAs("bajie");
+            }else {
+                securityUtil.logInAs(SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+
             Page<ProcessInstance> processInstancePage = processRuntime.processInstances(Pageable.of(0, 100));
             List<ProcessInstance> content = processInstancePage.getContent();
             List<HashMap<String, Object>> listMap = new ArrayList<HashMap<String, Object>>();
@@ -76,13 +85,27 @@ public class ProcessInstanceController {
     //启动流程实例
     @GetMapping(value = "/startProcess")
     public AjaxResponse startProcess(@RequestParam("processDefinitionKey") String processDefinitionKey,
-                                     @RequestParam("instanceName") String instanceName) {
+                                     @RequestParam("instanceName") String instanceName,
+                                     @RequestParam("instanceVariable") String instanceVariable) {
+        Map<String, Object> variables = new HashMap<>();
+        if (StringUtils.isNotBlank(instanceVariable)) {
+            if(instanceVariable.indexOf("_") == -1) {
+                return AjaxResponse.AjaxData(ResponseCode.ERROR.getCode(),
+                        "传入参数异常", instanceVariable);
+            }
+            String[] split = instanceVariable.split(";");
+            for (String param : split) {
+                String[] params = param.split("_");
+                variables.put(params[0], params[1]);
+            }
+        }
         try {
             securityUtil.logInAs("bajie");
             ProcessInstance processInstance = processRuntime.start(ProcessPayloadBuilder
                     .start()
                     .withProcessDefinitionKey(processDefinitionKey)
                     .withName(instanceName)
+                    .withVariables(variables)
                     .withBusinessKey("自定义Key")
                     .build());
             return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
@@ -98,7 +121,12 @@ public class ProcessInstanceController {
     @GetMapping(value = "/deleteInstance")
     public AjaxResponse deleteInstance(@RequestParam("instanceID") String instanceID) {
         try {
-            securityUtil.logInAs("bajie");
+            if(GlobalConfig.Test) {
+                securityUtil.logInAs("bajie");
+            }else {
+                securityUtil.logInAs(SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+
             ProcessInstance processInstance = processRuntime.delete(ProcessPayloadBuilder
                     .delete()
                     .withProcessInstanceId(instanceID) //实例id
@@ -116,7 +144,12 @@ public class ProcessInstanceController {
     @GetMapping(value = "/suspendInstance")
     public AjaxResponse suspendInstance(@RequestParam("instanceID") String instanceID) {
         try {
-            securityUtil.logInAs("bajie");
+            if(GlobalConfig.Test) {
+                securityUtil.logInAs("bajie");
+            }else {
+                securityUtil.logInAs(SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+
             ProcessInstance processInstance = processRuntime.suspend(ProcessPayloadBuilder
                     .suspend()
                     .withProcessInstanceId(instanceID) //实例id
@@ -134,7 +167,12 @@ public class ProcessInstanceController {
     @GetMapping(value = "/resumeInstance")
     public AjaxResponse resumeInstance(@RequestParam("instanceID") String instanceID) {
         try {
-            securityUtil.logInAs("bajie");
+            if(GlobalConfig.Test) {
+                securityUtil.logInAs("bajie");
+            }else {
+                securityUtil.logInAs(SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+
             ProcessInstance processInstance = processRuntime.resume(ProcessPayloadBuilder
                     .resume()
                     .withProcessInstanceId(instanceID) //实例id
@@ -152,11 +190,16 @@ public class ProcessInstanceController {
     @GetMapping(value = "/variables")
     public AjaxResponse variables(@RequestParam("instanceID") String instanceID) {
         try {
-            securityUtil.logInAs("bajie");
+            if(GlobalConfig.Test) {
+                securityUtil.logInAs("bajie");
+            }else {
+                securityUtil.logInAs(SecurityContextHolder.getContext().getAuthentication().getName());
+            }
+
             List<VariableInstance> list = processRuntime.variables(ProcessPayloadBuilder
-                .variables()
-                .withProcessInstanceId(instanceID)
-                .build());
+                    .variables()
+                    .withProcessInstanceId(instanceID)
+                    .build());
             return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
                     ResponseCode.SUCCESS.getDesc(), list);
         } catch (Exception e) {
