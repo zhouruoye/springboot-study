@@ -95,8 +95,8 @@ public class ProcessInstanceController {
     }
 
     //删除流程实例
-    @GetMapping(value = "/delInstance")
-    public AjaxResponse delInstance(@RequestParam("instanceID") String instanceID) {
+    @GetMapping(value = "/deleteInstance")
+    public AjaxResponse deleteInstance(@RequestParam("instanceID") String instanceID) {
         try {
             securityUtil.logInAs("bajie");
             ProcessInstance processInstance = processRuntime.delete(ProcessPayloadBuilder

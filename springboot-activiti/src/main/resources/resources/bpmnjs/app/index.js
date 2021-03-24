@@ -45,15 +45,12 @@ if (!window.FileList || !window.FileReader) {
 
 
 $(function () {
-    console.log('url',publicurl)
-    console.log('winurl',window.location.href)
     // 创建bpmn
     var param = tools.getUrlParam(window.location.href)
     $('.item').show()
-    //如果不是系统链接过来的地址
-    if(param === null ||  param === undefined) {
-        console.log('param is null')
-    } else if (param.type === 'addBpmn') {
+    if(param === null || param === undefined) {
+        console.log("param is null")
+    }else if (param.type === 'addBpmn') {
         tools.createDiagram(diagramXML, bpmnModeler, container);
     } else if (param.type === 'lookBpmn') { //编辑bpmn
         $('.item').hide()
@@ -119,6 +116,7 @@ $(function () {
         $('.item').hide()
         $('.download').show()
     }
+
     // 点击新增
     $('#js-download-diagram').on("click", function () {
        tools.syopen('alert')
@@ -128,18 +126,18 @@ $(function () {
     $('.cancel').on("click",function () {
         tools.syhide('alert')
     })
+
     // 点击确定
     $('#sure').on('click',function(){
        // const text=$("#deploymentName").val()
         tools.saveBpmn(bpmnModeler)
     })
 
-
-
     // 点击下载
     $("#downloadBpmn").on("click", function () {
         tools.downLoad(bpmnModeler)
     })
+
     // 点击上传
     $("#uploadFile").on("change", function () {
         tools.upload(bpmnModeler,container)

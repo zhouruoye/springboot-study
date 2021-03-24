@@ -1,18 +1,16 @@
 package com.cest.controller;
 
 import com.cest.enums.ResponseCode;
+import com.cest.mapper.ActivitiMapper;
 import com.cest.util.AjaxResponse;
+import com.cest.util.GlobalConfig;
 import lombok.extern.slf4j.Slf4j;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,15 +28,18 @@ import java.util.zip.ZipInputStream;
 @Slf4j
 @RestController
 @RequestMapping("/processDefinition")
-public class ProcessDefinitionController extends BaseController{
+public class ProcessDefinitionController {
 
     //流程部署
     @Autowired
     private RepositoryService repositoryService;
 
+    @Autowired
+    private ActivitiMapper activitiMapper;
+
     //BPMN上传
     @PostMapping(value = "/uploadStreamAndDeployment")
-    public AjaxResponse uploadStreamAndDeployment(@RequestParam("multipartFile") MultipartFile multipartFile) {
+    public AjaxResponse uploadStreamAndDeployment(@RequestParam("processFile") MultipartFile multipartFile) {
         try {
             //获取上传的文件名
             String originalFilename = multipartFile.getOriginalFilename();
@@ -79,7 +80,7 @@ public class ProcessDefinitionController extends BaseController{
         }
         String fileName = multipartFile.getOriginalFilename();  // 文件名
         String suffixName = fileName.substring(fileName.lastIndexOf("."));  // 后缀名
-        String filePath = BPMN_PathMapping; // 上传后的路径
+        String filePath = GlobalConfig.BPMN_PathMapping; // 上传后的路径
 
         //本地路径格式转上传路径格式
         filePath = filePath.replace("\\", "/");
@@ -98,6 +99,22 @@ public class ProcessDefinitionController extends BaseController{
         }
         return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
                 ResponseCode.SUCCESS.getDesc(), fileName);
+    }
+
+    @PostMapping(value = "/addDeploymentByString")
+    public AjaxResponse addDeploymentByString(@RequestParam("stringBPMN") String stringBPMN) {
+        try {
+            Deployment deployment = repositoryService.createDeployment()
+                    .addString("CreateWithBPMNJS.bpmn", stringBPMN)
+                    .name("不知道在哪显示的部署名称")
+                    .deploy();
+            //System.out.println(deployment.getName());
+            return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
+                    ResponseCode.SUCCESS.getDesc(), deployment.getId());
+        } catch (Exception e) {
+            return AjaxResponse.AjaxData(ResponseCode.ERROR.getCode(),
+                    "string部署流程失败", e.toString());
+        }
     }
 
     //流程部署查询
@@ -187,11 +204,14 @@ public class ProcessDefinitionController extends BaseController{
 
     //流程定义查询
     @GetMapping(value = "/delDefinition")
-    public AjaxResponse delDefinition(@RequestParam("deploymentID") String deploymentID) {
+    public AjaxResponse delDefinition(@RequestParam("depID") String depID, @RequestParam("pdID") String pdID) {
         try {
-            repositoryService.deleteDeployment(deploymentID, true);
+            //删除数据
+            int result = activitiMapper.DeleteFormData(pdID);
+
+            repositoryService.deleteDeployment(depID, true);
             return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
-                    ResponseCode.SUCCESS.getDesc(), deploymentID);
+                    ResponseCode.SUCCESS.getDesc(), depID);
         } catch (Exception e) {
             e.printStackTrace();
             log.error("删除流程定义失败:{}", e);

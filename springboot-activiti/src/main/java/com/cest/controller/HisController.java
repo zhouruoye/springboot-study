@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/task")
+@RequestMapping("/activitiHistory")
 public class HisController {
 
     @Autowired
