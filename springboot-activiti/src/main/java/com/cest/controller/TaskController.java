@@ -2,6 +2,7 @@ package com.cest.controller;
 
 import com.cest.enums.ResponseCode;
 import com.cest.mapper.ActivitiMapper;
+import com.cest.pojo.UserInfo;
 import com.cest.security.SecurityUtil;
 import com.cest.util.AjaxResponse;
 import com.cest.util.GlobalConfig;
@@ -18,6 +19,7 @@ import org.activiti.engine.RepositoryService;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,7 +94,8 @@ public class TaskController {
     //完成待办任务
     @GetMapping(value = "/completeTask")
     public AjaxResponse completeTask(@RequestParam("taskID") String taskID,
-                                     @RequestParam(value = "variable",required = false) String variable) {
+                                     @RequestParam(value = "variable",required = false) String variable,
+                                     @AuthenticationPrincipal UserInfo userInfo) {
         Map<String, Object> variables = new HashMap<>();
         if (StringUtils.isNotBlank(variable)) {
             if(variable.indexOf("_") == -1) {
@@ -117,9 +120,10 @@ public class TaskController {
             if (task.getAssignee() == null) {
                 taskRuntime.claim(TaskPayloadBuilder.claim()
                         .withTaskId(task.getId())
+                        .withAssignee(userInfo.getUsername())
                         .build());
             }
-            taskRuntime.complete(TaskPayloadBuilder
+            Task complete = taskRuntime.complete(TaskPayloadBuilder
                     .complete()
                     .withTaskId(task.getId())
                     .withVariables(variables)

@@ -64,8 +64,8 @@ public class Part4_TaskTest extends BaseTest{
      */
     @Test
     public void claimTask(){
-        Task task = taskService.createTaskQuery().taskId("37efdb7e-8625-11eb-9ab5-00ff2cb67c15").singleResult();
-        taskService.claim("37efdb7e-8625-11eb-9ab5-00ff2cb67c15","bajie");
+        Task task = taskService.createTaskQuery().taskId("b690a917-af20-11eb-90e0-00ff2cb67c15").singleResult();
+        taskService.claim("b690a917-af20-11eb-90e0-00ff2cb67c15","bajie");
     }
 
     /**
@@ -73,8 +73,8 @@ public class Part4_TaskTest extends BaseTest{
      */
     @Test
     public void setTaskAssignee(){
-        Task task = taskService.createTaskQuery().taskId("9007ce4f-8623-11eb-a086-00ff2cb67c15").singleResult();
+//        Task task = taskService.createTaskQuery().taskId("9007ce4f-8623-11eb-a086-00ff2cb67c15").singleResult();
         //taskService.setAssignee("9007ce4f-8623-11eb-a086-00ff2cb67c15","null");//归还候选任务 --- > 领取任务后 归还
-        taskService.setAssignee("9007ce4f-8623-11eb-a086-00ff2cb67c15","bajie");//交办
+        taskService.setAssignee("ad95854e-8d41-11eb-86f3-00ff2cb67c15","bajie");//交办
     }
 }
