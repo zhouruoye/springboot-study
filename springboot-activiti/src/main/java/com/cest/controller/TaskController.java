@@ -123,11 +123,20 @@ public class TaskController {
                         .withAssignee(userInfo.getUsername())
                         .build());
             }
-            Task complete = taskRuntime.complete(TaskPayloadBuilder
-                    .complete()
-                    .withTaskId(task.getId())
-                    .withVariables(variables)
-                    .build());
+
+            if(variables.size() == 0) {
+                Task complete = taskRuntime.complete(TaskPayloadBuilder
+                        .complete()
+                        .withTaskId(task.getId())
+                        .build());
+            } else {
+                Task complete = taskRuntime.complete(TaskPayloadBuilder
+                        .complete()
+                        .withTaskId(task.getId())
+                        .withVariables(variables)
+                        .build());
+            }
+
             return AjaxResponse.AjaxData(ResponseCode.SUCCESS.getCode(),
                     ResponseCode.SUCCESS.getDesc(), null);
         } catch (Exception e) {

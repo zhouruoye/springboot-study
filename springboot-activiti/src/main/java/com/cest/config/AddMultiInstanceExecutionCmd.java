@@ -180,8 +180,6 @@ public class AddMultiInstanceExecutionCmd extends AbstractCountersignCmd impleme
 
             runtimeService.setVariables(parentNode.getId(), variables);
         }
-
-
         return "加签成功";
     }
 }

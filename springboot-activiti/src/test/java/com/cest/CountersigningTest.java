@@ -19,15 +19,15 @@ public class CountersigningTest extends BaseTest{
     @Autowired
     private TaskOpService taskOpService;
 
+
     /**
      *  测试会签减签
      */
     @Test
     public void testRemoveCountersigningTask() {
         List<String> assigneeList = new ArrayList<>();
-        assigneeList.add("bajie");
-
-        countersigningService.removeCountersigningTask("b81b9e89-b3cc-11eb-bc16-00ff2cb67c15", assigneeList);
+        assigneeList.add("salaboy");
+        countersigningService.removeCountersigningTask("e2e13ede-b857-11eb-805f-00ff2cb67c15", assigneeList);
     }
 
 
@@ -45,6 +45,6 @@ public class CountersigningTest extends BaseTest{
 
     @Test
     public void skipActivitiPoint() {
-        taskOpService.withdraw("b9ea0403-b7bf-11eb-be51-00ff2cb67c15","Activity_1mrbp7d");
+        taskOpService.withdraw("ed6a29ac-b83f-11eb-9c1a-00ff2cb67c15","zfsq01");
     }
 }

@@ -24,9 +24,9 @@ public class TaskOpService {
     @Autowired
     private ManagementService managementService;
 
+    //当前任务Id 要跳转的节点targetNodeId
     public void withdraw(String taskId, String targetNodeId) {
         log.info("========开始withdraw========");
-
         // 当前任务
         Task currentTask = taskService.createTaskQuery().taskId(taskId).singleResult();
         // 获取流程定义
@@ -38,7 +38,6 @@ public class TaskOpService {
         String executionEntityId = managementService.executeCommand(new DeleteTaskCmd(currentTask.getId()));
         // 流程执行到来源节点
         managementService.executeCommand(new SetFLowNodeAndGoCmd(targetNode, executionEntityId));
-
         log.info("========结束withdraw========");
     }
 }
