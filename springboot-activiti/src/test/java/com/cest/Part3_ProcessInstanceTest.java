@@ -36,6 +36,7 @@ public class Part3_ProcessInstanceTest extends BaseTest{
     @Test
     public void getProcessInstance() {
         List<ProcessInstance> list = runtimeService.createProcessInstanceQuery().list();
+        runtimeService.createProcessInstanceQuery().processInstanceBusinessKey("自定义Key").singleResult();
 
         for (ProcessInstance processInstance : list) {
             System.out.println("流程实例");
@@ -44,6 +45,7 @@ public class Part3_ProcessInstanceTest extends BaseTest{
             System.out.println("getProcessDefinitionId:" + processInstance.getProcessDefinitionId()); //流程定义id
             System.out.println("getProcessDefinitionName:" + processInstance.getProcessDefinitionName()); //流程定义name
             System.out.println("getProcessDefinitionKey:" + processInstance.getProcessDefinitionKey()); //流程定义key
+            System.out.println("getBusinessKey:" + processInstance.getBusinessKey()); //流程定义key
             System.out.println("getDeploymentId:" + processInstance.getDeploymentId());
             System.out.println("isEnded:" + processInstance.isEnded()); //是否结束
             System.out.println("isSuspended:" + processInstance.isSuspended()); //是否被挂起

@@ -31,4 +31,8 @@ public interface ActivitiMapper {
             "      #{formData.FORM_KEY_,jdbcType=VARCHAR}, #{formData.Control_ID_,jdbcType=VARCHAR},#{formData.Control_VALUE_,jdbcType=VARCHAR})" +
             "    </foreach>  </script>")
     int insertFormData(@Param("maps") List<HashMap<String, Object>> maps);
+
+
+    @Select("select t.EXECUTION_ID_ from ACT_HI_ACTINST t where t.CALL_PROC_INST_ID_ in (select PROC_INST_ID_ from ACT_RU_TASK where ID_ = #{taskId})")
+    String getExecutionIdByTaskId(@Param("taskId") String taskId);
 }

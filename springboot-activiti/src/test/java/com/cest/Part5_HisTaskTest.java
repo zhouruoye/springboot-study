@@ -44,7 +44,7 @@ public class Part5_HisTaskTest extends BaseTest {
             System.out.println("Id："+ hi.getId());
             System.out.println("ProcessInstanceId："+ hi.getProcessInstanceId());
             System.out.println("Name："+ hi.getName());
-
+            System.out.println("ExecutionId："+ hi.getExecutionId());
         }
     }
 }

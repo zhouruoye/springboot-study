@@ -14,6 +14,10 @@ public class MultInstanceStartListener implements ExecutionListener
         list.add("bajie");
         list.add("wukong");
         list.add("salaboy");
-        execution.setVariable("assigneeList",list);
+//        execution.setVariable("assigneeList",list);
+        execution.setVariable("temp_groupId",list);
     }
+
+    //人 角色 机构 业务方  查待办 在办   返回count
+    //人 业务方  查待办 在办   返回count
 }
