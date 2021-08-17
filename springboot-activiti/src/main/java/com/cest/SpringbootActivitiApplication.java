@@ -12,6 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class SpringbootActivitiApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(SpringbootActivitiApplication.class, args);
 	}
 
