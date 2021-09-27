@@ -25,6 +25,7 @@ public class UseMDC {
     }
 
     private static void mdc02 () {
+
         log.info("log in mdc02");
     }
 

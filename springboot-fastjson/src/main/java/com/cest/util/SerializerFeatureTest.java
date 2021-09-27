@@ -118,17 +118,17 @@ public class SerializerFeatureTest {
 
         List<User> list = new ArrayList<User>();
         User user1 = new User();
-        user1.setId(1);
+        user1.setId("1");
         user1.setOld("11");
         user1.setName("用户1");
         user1.setAdd("北京");
         User user2 = new User();
-        user2.setId(2);
+        user2.setId("2");
         user2.setOld("22");
         user2.setName("用户2");
         user2.setAdd("上海");
         User user3 = new User();
-        user3.setId(3);
+        user3.setId("3");
         user3.setOld("33");
         user3.setName("用户3");
         user3.setAdd("广州");

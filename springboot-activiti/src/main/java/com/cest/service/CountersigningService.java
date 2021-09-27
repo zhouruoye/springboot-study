@@ -73,6 +73,5 @@ public class CountersigningService  {
      */
     @Transactional(rollbackFor = Exception.class)
     public void moveSubOutCommand(String taskId, String targetNodeId) {
-//        managementService.executeCommand(new MoveSubOutCommand(taskId, targetNodeId));
     }
 }
