@@ -4,7 +4,7 @@ spring:
   datasource:
     username: root
     password: 123456
-    url: jdbc:mysql://10.243.128.90:3308/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
+    url: jdbc:mysql://101.34.12.96:3307/activiti?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC&nullCatalogMeansCurrent=true
     driver-class-name: com.mysql.cj.jdbc.Driver
     #日志的相关配置
 logging:
